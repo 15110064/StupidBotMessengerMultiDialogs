@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Connector;
+using MultiDialogsBot.Utils;
 using StupidBotMessengerMultiDialogs.Model;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,14 @@ namespace StupidBotMessengerMultiDialogs.Services
             using (WebClient wc = new WebClient())
             {
                 wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
-                var json = (wc.DownloadString("http://localhost:51607/api/roomtype/getall?keyword=&page=0&pageSize=25"));
+                var json = (wc.DownloadString(HostValueUtils.GETALLROOMTYPE));
 
-                RootObject items = (RootObject)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(RootObject));
+                List<RoomType> items = (List<RoomType>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<RoomType>));
 
                 message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-                foreach (RoomType p in items.Items)
+                foreach (RoomType p in items)
                 {
-                    var heroCard = new ThumbnailCard
+                    var heroCard = new HeroCard
                     {
                         Title = p.Name,
                         Subtitle = p.Description,

@@ -3,10 +3,12 @@ using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
 using StupidBotMessengerMultiDialogs.Enum;
+using StupidBotMessengerMultiDialogs.Model;
 using StupidBotMessengerMultiDialogs.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -17,7 +19,6 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
     public class LuisDialog : LuisDialog<object>
     {
       
-
         [LuisIntent("")]
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
@@ -54,15 +55,42 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
         [LuisIntent("AvailableRoom")]
         public async Task AvailableRoom(IDialogContext context, LuisResult result)
         {
+
+            IMessageActivity messageRooms;
             string message = $"Dưới đây là thông tin các phòng còn trống:";
             await context.PostAsync(message);
             using (RoomService roomService = new RoomService())
             {
-                var messageRooms = roomService.GetRooms(context.MakeMessage());
+
+                messageRooms = roomService.GetRooms(context.MakeMessage());
                 await context.PostAsync(messageRooms);
-               // context.Wait(this.MessageReceived);
+                context.Wait<Activity>(this.BookRoomClick);
+
             }
-            this.ShowOptions(context);
+
+            ////this.ShowOptions(context);
+        }
+
+        private async Task BookRoomClick(IDialogContext context, IAwaitable<Activity> result)
+        {
+            var temp = await result;
+
+            if (temp.Text != null && temp.Text.Length != 0)
+            {
+                await this.MessageReceived(context, result);
+                return;
+            }
+
+            Room receivedRoom;
+            using (RoomService roomService = new RoomService())
+            {
+                receivedRoom = roomService.JsonToRoom((Newtonsoft.Json.Linq.JObject) temp.Value);
+            }
+            
+            await context.PostAsync("Nhận được yêu cầu đặt phòng: ");
+            await context.Forward(new HotelsDialog(), this.ResumeAfterBookingDialog, receivedRoom, CancellationToken.None);
+            //context.Done(new object());
+
         }
 
         [LuisIntent("RoomPrice")]

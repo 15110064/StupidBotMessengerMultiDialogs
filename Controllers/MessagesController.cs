@@ -20,6 +20,7 @@
             {
                 await Conversation.SendAsync(activity, () => new RootDialog());
             }
+           
             else
             {
                 this.HandleSystemMessage(activity);

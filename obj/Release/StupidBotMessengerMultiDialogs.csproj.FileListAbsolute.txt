@@ -109,8 +109,8 @@ F:\DoAn2\StupidBotMessengerMultiDialogs\bin\nl\Microsoft.Bot.Builder.resources.d
 F:\DoAn2\StupidBotMessengerMultiDialogs\bin\pt-BR\Microsoft.Bot.Builder.resources.dll
 F:\DoAn2\StupidBotMessengerMultiDialogs\bin\ru\Microsoft.Bot.Builder.resources.dll
 F:\DoAn2\StupidBotMessengerMultiDialogs\bin\zh-hans\Microsoft.Bot.Builder.resources.dll
-F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\StupidBotMessengerMultiDialogs.csprojResolveAssemblyReference.cache
 F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\StupidBotMessengerMultiDialogs.csproj.CoreCompileInputs.cache
 F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\StupidBotMessengerMultiDialogs.csproj.CopyComplete
 F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\MultiDialogsBot.dll
 F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\MultiDialogsBot.pdb
+F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\StupidBotMessengerMultiDialogs.csprojResolveAssemblyReference.cache

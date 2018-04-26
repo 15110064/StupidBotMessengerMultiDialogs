@@ -9,12 +9,23 @@
     using Microsoft.Bot.Builder.FormFlow;
     using Microsoft.Bot.Connector;
     using StupidBotMessengerMultiDialogs.Model;
+    using StupidBotMessengerMultiDialogs.Services;
 
     [Serializable]
     public class HotelsDialog : IDialog<object>
     {
+        private HotelsQuery hotelQuery;
         public async Task StartAsync(IDialogContext context)
         {
+            hotelQuery = new HotelsQuery();
+            if(context.Activity is Activity)
+            {
+                using (RoomService service = new RoomService())
+                    hotelQuery.MãPhòng = service.JsonToRoom((context.Activity as Activity).Value as Newtonsoft.Json.Linq.JObject).Name;
+                await context.PostAsync(hotelQuery.MãPhòng);
+
+            }
+
             await context.PostAsync("Cảm ơn quý khách đã chọn Khách sạn Mai Sơn!");
             var hotelsFormDialog = FormDialog.FromForm(this.BuildHotelsForm, FormOptions.PromptInStart);
             context.Call(hotelsFormDialog, this.ResumeAfterHotelsFormDialog);
@@ -72,5 +83,15 @@
 
             return hotels;
         }
+
+
+        async Task FirstMessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> message)
+        {
+            var msg = message;
+          
+        }
+
     }
+
+    
 }
