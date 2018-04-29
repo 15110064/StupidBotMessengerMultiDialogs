@@ -11,7 +11,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MultiDialogsBot</RootNamespace>
+    <RootNamespace>StupidBotMessengerMultiDialogs</RootNamespace>
     <AssemblyName>MultiDialogsBot</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
@@ -129,9 +129,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Asserts\PagedCarouselDialog.cs" />
+    <Compile Include="Asserts\RegexConstants.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\HotelsDialog.cs" />
     <Compile Include="Dialogs\LuisDialog.cs" />
+    <Compile Include="Dialogs\RoomCategoryDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\SupportDialog.cs" />
     <Compile Include="Enum\Selection.cs" />
@@ -139,6 +142,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Model\HotelRoom.cs" />
+    <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Room.cs" />
     <Compile Include="Queries\HotelsQuery.cs" />
     <Compile Include="Model\Post.cs" />

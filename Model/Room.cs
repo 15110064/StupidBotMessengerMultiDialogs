@@ -17,10 +17,10 @@ namespace StupidBotMessengerMultiDialogs.Model
         public decimal Price { get; set; }
         public object Tags { get; set; }
         public bool? HotFlag { get; set; }
-        public int RoomTypeID { get; set; }
+        public int? RoomTypeID { get; set; }
         public decimal PromotionPrice { get; set; }
         public object ViewCount { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public object CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public object UpdatedBy { get; set; }

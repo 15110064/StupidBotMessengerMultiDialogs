@@ -14,21 +14,22 @@
     [Serializable]
     public class HotelsDialog : IDialog<object>
     {
-        private HotelsQuery hotelQuery;
+        public HotelsQuery HotelQuery { get; set; } = new HotelsQuery();
         public async Task StartAsync(IDialogContext context)
         {
-            hotelQuery = new HotelsQuery();
+        
             if(context.Activity is Activity)
             {
                 using (RoomService service = new RoomService())
-                    hotelQuery.MãPhòng = service.JsonToRoom((context.Activity as Activity).Value as Newtonsoft.Json.Linq.JObject).Name;
-                await context.PostAsync(hotelQuery.MãPhòng);
+                    HotelQuery.MãPhòng = service.JsonToRoom((context.Activity as Activity).Value as Newtonsoft.Json.Linq.JObject).Name;
+                await context.PostAsync(HotelQuery.MãPhòng);
 
             }
 
             await context.PostAsync("Cảm ơn quý khách đã chọn Khách sạn Mai Sơn!");
             var hotelsFormDialog = FormDialog.FromForm(this.BuildHotelsForm, FormOptions.PromptInStart);
             context.Call(hotelsFormDialog, this.ResumeAfterHotelsFormDialog);
+            
         }
 
         private IForm<HotelsQuery> BuildHotelsForm()

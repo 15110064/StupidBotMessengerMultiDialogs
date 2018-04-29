@@ -16,6 +16,8 @@
 
         private const string Help = "Giúp đỡ";
 
+       
+
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(this.MessageReceivedAsync);
@@ -32,7 +34,7 @@
             }
             else if(message.Text.ToLower().Contains("đặt phòng"))
             {
-                context.Call(new HotelsDialog(), this.ResumeAfterOptionDialog);
+                context.Call(new RoomCategoryDialog(), this.ResumeAfterOptionDialog);
             }
             else
             {
@@ -59,7 +61,7 @@
                         break;
 
                     case Booking:
-                        context.Call(new HotelsDialog(), this.ResumeAfterOptionDialog);
+                        context.Call(new RoomCategoryDialog(), this.ResumeAfterOptionDialog);
                         break;
 
                     case Help:

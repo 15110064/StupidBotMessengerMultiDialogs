@@ -49,6 +49,7 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
                 var message = roomTypeService.GetRoomTypes(context.MakeMessage());
                 await context.PostAsync(message);
                 context.Wait(this.MessageReceived);
+                //context.Wait<Activity>(this.RoomTypeClick);
             }
         }
 
@@ -61,8 +62,8 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
             await context.PostAsync(message);
             using (RoomService roomService = new RoomService())
             {
-
-                messageRooms = roomService.GetRooms(context.MakeMessage());
+                Activity activity = context.Activity as Activity;
+                messageRooms = roomService.GetRooms(activity.CreateReply());
                 await context.PostAsync(messageRooms);
                 context.Wait<Activity>(this.BookRoomClick);
 
@@ -81,17 +82,43 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
                 return;
             }
 
-            Room receivedRoom;
-            using (RoomService roomService = new RoomService())
-            {
-                receivedRoom = roomService.JsonToRoom((Newtonsoft.Json.Linq.JObject) temp.Value);
-            }
+            //Room receivedRoom;
+            //using (RoomService roomService = new RoomService())
+            //{
+            //    receivedRoom = roomService.JsonToRoom((Newtonsoft.Json.Linq.JObject) temp.Value);
+            //}
             
-            await context.PostAsync("Nhận được yêu cầu đặt phòng: ");
-            await context.Forward(new HotelsDialog(), this.ResumeAfterBookingDialog, receivedRoom, CancellationToken.None);
-            //context.Done(new object());
+            await context.PostAsync("Nhận được yêu cầu đặt phòng: " + temp.Value);
 
         }
+
+        private async Task RoomTypeClick(IDialogContext context, IAwaitable<Activity> result)
+        {
+            var temp = await result;
+
+            if (temp.Text != null && temp.Text.Length != 0)
+            {
+                await this.MessageReceived(context, result);
+                return;
+            }
+
+            RoomType receivedRoom;
+            using (RoomTypeService roomService = new RoomTypeService())
+            {
+                receivedRoom = roomService.JsonToRoomType((Newtonsoft.Json.Linq.JObject)temp.Value);
+            }
+            IMessageActivity messageRooms;
+            using (RoomService roomService = new RoomService())
+            {
+                Activity activity = context.Activity as Activity;
+                messageRooms = roomService.GetRoomsByRoomType(activity.CreateReply());
+                await context.PostAsync(messageRooms);
+                context.Wait<Activity>(this.BookRoomClick);
+
+            }
+
+        }
+
 
         [LuisIntent("RoomPrice")]
         public async Task RoomPrice(IDialogContext context, LuisResult result)
