@@ -1,6 +1,7 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using StupidBotMessengerMultiDialogs.Asserts;
+using StupidBotMessengerMultiDialogs.Model;
 using StupidBotMessengerMultiDialogs.Services;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,13 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
     [Serializable]
     public class RoomCategoryDialog : PagedCarouselDialog<string>
     {
-
         public RoomCategoryDialog()
         {
-           
         }
 
         public override string Prompt
         {
-            get { return "Please select an item"; }
+            get { return "Vui lòng chọn loại phòng:"; }
         }
 
         public override PagedCarouselCards GetCarouselCards(int pageNumber, int pageSize)
@@ -49,8 +48,8 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
             }
             if (roomTypeCatIds.IndexOf(roomCategoryName) !=-1)
             {
-                await context.PostAsync("Bạn vừa định xem phòng trống cho loại phòng" + roomCategoryName);
-                context.Done(roomCategoryName);
+                context.Call(new RoomDialog(), this.ResumeAfterRoomDialog);
+                //context.Done(roomCategoryName);
             }
             else
             {
@@ -58,6 +57,15 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
                 await this.ShowProducts(context);
                 context.Wait(this.MessageReceivedAsync);
             }
+        }
+
+        private async Task ResumeAfterRoomDialog(IDialogContext context, IAwaitable<object> result)
+        {
+            var message = await result;
+            //this.reservation.RoomID = Convert.ToInt32(message);
+            //await context.PostAsync($"Nhan duoc phong: "+ message);
+            context.Done(message);
+            //context.Call(this.dialogFactory.Create<BouquetsDialog, string>(this.order.FlowerCategoryName), this.AfterBouquetSelected);
         }
     }
 }

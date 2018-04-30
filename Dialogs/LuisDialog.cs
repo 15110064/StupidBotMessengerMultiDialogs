@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
@@ -44,6 +45,8 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
         [LuisIntent("RoomType")]
         public async Task RoomTypeInfo(IDialogContext context, LuisResult result)
         {
+            //var reservationDialog = new FormDialog<Reservation>(this.reservation, Reservation.BuildOrderForm, FormOptions.PromptInStart);
+            //context.Call(reservationDialog, this.ResumeAfterReservationDialog);
             using (RoomTypeService roomTypeService = new RoomTypeService())
             {
                 var message = roomTypeService.GetRoomTypes(context.MakeMessage());
@@ -146,9 +149,10 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
         [LuisIntent("BookRoom")]
         public async Task BookRoom(IDialogContext context, LuisResult result)
         {
-            string message = $"Ghi nhận yêu cầu đặt phòng";
-            await context.PostAsync(message);
-           // context.Call(new BookingDialog(), this.ResumeAfterBookingDialog);
+            
+            await context.Forward(new RootDialog(), this.ResumeAfterBookingDialog, "đặt phòng", CancellationToken.None);
+            await context.PostAsync("Vui lòng gõ \"đặt phòng\" lần nữa");
+            //context.Call(reservationDialog, );
         }
 
         [LuisIntent("Farewell")]
@@ -240,7 +244,8 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
 
         private async Task ResumeAfterBookingDialog(IDialogContext context, IAwaitable<object> result)
         {
-            context.Wait(this.MessageReceived);
+            context.Done(result);
+            //context.Wait(this.MessageReceived);
         }
 
     }

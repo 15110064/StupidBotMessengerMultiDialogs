@@ -46,7 +46,72 @@ namespace StupidBotMessengerMultiDialogs.Services
             }
         }
 
-        
+
+        public List<HeroCard> GetRoomHeroCards()
+        {
+            List<Room> postList;
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                var json = (wc.DownloadString(HostValueUtils.GETALLROOM));
+
+                postList = (List<Room>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Room>));
+                List<HeroCard> heroCards = new List<HeroCard>();
+                
+                foreach (Room p in postList)
+                {
+                    List<CardImage> imgList = new List<CardImage>
+                    {
+                        new CardImage(HostValueUtils.DOMAIN + ":" + HostValueUtils.PORTSSL + p.Image)
+                    };
+                    var heroCard = new HeroCard
+                    {
+                        Title = p.Name,
+                        Text = p.Description,
+                        Images = imgList,
+                        Buttons = new List<CardAction> { new CardAction(ActionTypes.PostBack, "Đặt phòng này", value: p.ID.ToString()) }
+                    };
+                    heroCards.Add(heroCard);
+                }
+                return heroCards;
+            }
+        }
+
+
+        public List<string> GetRoomID()
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                var json = (wc.DownloadString(HostValueUtils.GETALLROOM));
+
+                List<Room> items = (List<Room>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Room>));
+
+                List<string> roomID = new List<string>();
+                foreach (Room p in items)
+                {
+
+                    roomID.Add(p.ID.ToString());
+                }
+                return roomID;
+            }
+        }
+
+        public Room GetRoomFromID(int Id)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                var json = (wc.DownloadString(HostValueUtils.GETALLROOM));
+
+                List<Room> items = (List<Room>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Room>));
+
+
+                return items.Find(p => (p.ID == Id));
+            }
+        }
+
+
 
         public IMessageActivity GetRoomsByRoomType(IMessageActivity message)
         {

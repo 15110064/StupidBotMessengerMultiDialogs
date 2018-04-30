@@ -132,15 +132,18 @@
     <Compile Include="Asserts\PagedCarouselDialog.cs" />
     <Compile Include="Asserts\RegexConstants.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\CustomerDialog.cs" />
     <Compile Include="Dialogs\HotelsDialog.cs" />
     <Compile Include="Dialogs\LuisDialog.cs" />
     <Compile Include="Dialogs\RoomCategoryDialog.cs" />
+    <Compile Include="Dialogs\RoomDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\SupportDialog.cs" />
     <Compile Include="Enum\Selection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\HotelRoom.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Room.cs" />
@@ -149,6 +152,7 @@
     <Compile Include="Model\Reservation.cs" />
     <Compile Include="Model\RoomType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\RoomTypeService.cs" />
     <Compile Include="Utils\HostValueUtils.cs" />

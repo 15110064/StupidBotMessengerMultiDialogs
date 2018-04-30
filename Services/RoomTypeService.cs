@@ -37,7 +37,7 @@ namespace StupidBotMessengerMultiDialogs.Services
                         Title = p.Name,
                         Subtitle = p.Description,
                         Images = imgList,
-                        Buttons = new List<CardAction> { new CardAction(ActionTypes.PostBack, "Xem phòng trống", value: p.ID.ToString()) }
+                        //Buttons = new List<CardAction> { new CardAction(ActionTypes.PostBack, "Xem phòng trống", value: p.ID.ToString()) }
                     };
 
                     message.Attachments.Add(heroCard.ToAttachment());
