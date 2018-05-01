@@ -140,8 +140,8 @@
                 var receiptCard = new HeroCard
                 {
                     Title = room.Name.ToString(),
-                    Text = "Ngày đến: " +  reservation.CheckInDateTime.Date.ToString("dd/MM/yyyy") +
-                    "\n\nNgày đi: " +  reservation.CheckOutDateTime.Date.ToString("dd/MM/yyyy") 
+                    Text = "Ngày đến: " +  reservation.CheckInDateTime.Date.ToString("MM/dd/yyyy") +
+                    "\n\nNgày đi: " +  reservation.CheckOutDateTime.Date.ToString("MM/dd/yyyy") 
                 };
                 Activity activity = context.Activity as Activity;
                 IMessageActivity messageCard = activity.CreateReply();
@@ -189,8 +189,8 @@
                          Image = new CardImage(HostValueUtils.DOMAIN + room.Image),
                     } },
                     Facts = new List<Fact> {
-                        new Fact("Ngày đến:", reservation.CheckInDateTime.ToString("dd/MM/yyyy").ToString()),
-                        new Fact("Ngày đi:", reservation.CheckOutDateTime.ToString("dd/MM/yyyy").ToString()),
+                        new Fact("Ngày đến:", reservation.CheckInDateTime.ToString("MM/dd/yyyy").ToString()),
+                        new Fact("Ngày đi:", reservation.CheckOutDateTime.ToString("MM/dd/yyyy").ToString()),
                         new Fact("Số điện thoại:", customer.Phone.ToString()),
                         new Fact("CMND:", customer.PassportNumber.ToString())
                     },
