@@ -19,10 +19,16 @@ namespace StupidBotMessengerMultiDialogs.Model
         //[Template(TemplateUsage.NotUnderstood, "Xin lỗi, định dạng ngày bị sai", "Quý khách vui lòng nhập đúng định dạng ngày")]
         [Prompt("Vui lòng nhập họ tên:")]
         public string Name { set; get; }
+        //------------------------------------------------------Being modified Code by Huynh Kien Minh ( 1/5/2018 ) start at line 22
+        [Template(TemplateUsage.NotUnderstood, "Số điện thoại không hợp lệ. Mời quý khách nhập lại")]
+        [Pattern(@"(<Undefined control sequence>\d)?\s*\d{3}(-|\s*)\d{7}")]
         [Prompt("Vui lòng nhập số điện thoại:")]
         public string Phone { set; get; }
         [Optional]
+        [Template(TemplateUsage.NotUnderstood, "Địa chỉ email không hợp lê. Mời quý khách nhập lại")]
+        [Pattern(@"[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]
         [Prompt("Vui lòng nhập số email:")]
+      
         public string Email { set; get; }
         [Optional]
         [Prompt("Vui lòng nhập địa chỉ:")]
@@ -32,7 +38,10 @@ namespace StupidBotMessengerMultiDialogs.Model
      
         public string Nationality { get; set; }
         [Optional]
+        [Template(TemplateUsage.NotUnderstood, "Số CMND phải 9 số. Mời quý khách nhập lại")]
+        [Pattern(@"(<Undefined control sequence>\d)?\s*\d{3}(-|\s*)\d{6}")]
         [Prompt("Vui lòng nhập số CMND:")]
+        //------------------------------------------------------Being modified Code by Huynh Kien Minh ( 1/5/2018 ) end at line 44
         public string PassportNumber { get; set; }
 
         public string FacebookID { get; set; }

@@ -126,7 +126,7 @@
         }
         //Sau khi khách chọn loại phòng, khách được chọn tiếp phòng tương ứng của loại phòng
         //Chọn loại phòng xong thì quay trở lại hàm này.
-        //Ở đây, ta lưu thông tin về RoomID vào reseration.
+        //Ở đây, ta lưu thông tin về RoomID vào reservation.
         //Sau khi có các thông tin cần thiết, ta lấy thông tin khách hàng.
         private async Task ResumeAfterRoomCategoryDialog(IDialogContext context, IAwaitable<object> result)
         {
@@ -140,8 +140,8 @@
                 var receiptCard = new HeroCard
                 {
                     Title = room.Name.ToString(),
-                    Text = "Ngày đến: " +  reservation.CheckInDateTime.Date.ToString("MM/dd/yyyy") +
-                    "\n\nNgày đi: " +  reservation.CheckOutDateTime.Date.ToString("MM/dd/yyyy") 
+                    Text = "Ngày đến: " +  reservation.CheckInDateTime.Date.ToString("dd/MM/yyyy") +
+                    "\n\nNgày đi: " +  reservation.CheckOutDateTime.Date.ToString("dd/MM/yyyy") 
                 };
                 Activity activity = context.Activity as Activity;
                 IMessageActivity messageCard = activity.CreateReply();
@@ -188,12 +188,14 @@
                          Title = room.Name,
                          Image = new CardImage(HostValueUtils.DOMAIN + room.Image),
                     } },
+                    //------------------------------------------------------Being modified Code by Huynh Kien Minh ( 1/5/2018 ) start at line 191
                     Facts = new List<Fact> {
-                        new Fact("Ngày đến:", reservation.CheckInDateTime.ToString("MM/dd/yyyy").ToString()),
-                        new Fact("Ngày đi:", reservation.CheckOutDateTime.ToString("MM/dd/yyyy").ToString()),
+                        new Fact("Ngày nhận phòng:", reservation.CheckInDateTime.ToString("dd/MM/yyyy").ToString()),
+                        new Fact("Ngày trả phòng:", reservation.CheckOutDateTime.ToString("dd/MM/yyyy").ToString()),
                         new Fact("Số điện thoại:", customer.Phone.ToString()),
                         new Fact("CMND:", customer.PassportNumber.ToString())
                     },
+                    //------------------------------------------------------Being modified Code by Huynh Kien Minh ( 1/5/2018 ) end at line 198
                     Total = (room.Price* (Convert.ToDecimal((reservation.CheckOutDateTime - reservation.CheckInDateTime).TotalDays))).ToString()
                 };
                 Activity activity = context.Activity as Activity;
@@ -214,7 +216,9 @@
             if (isCorrect)
             {
                 //Bắt đầu đẩy lên CSDL thông tin khách hàng và thông tin phiếu đặt phòng
-                await context.PostAsync("Đơn đặt phòng đã được lưu");
+
+                //------------------------------------------------------Being modified Code by Huynh Kien Minh ( 1/5/2018 ) start & finish at line 221 
+                await context.PostAsync("Đơn đặt phòng của quý khách đã thành công. Cảm ơn quý khách đã tín nhiệm Khách sạn Mai Sơn");
             }
             else
             {
@@ -225,11 +229,24 @@
 
         //Sau khi điền các thông tin cho Reservation, lưu các thông tin cần thiết lại vào this.reservation
         //Gọi RoomCategoryDialog để khách chọn loại phòng.
+        //
+        //
+        //------------------------------------------------------Being modified Code by Huynh Kien Minh ( 1/5/2018 ) start at line 237 
         private async Task ResumeAfterReservationDialog(IDialogContext context, IAwaitable<Reservation> result)
         {
             var reservation = await result;
             this.reservation = reservation as Reservation;
-            context.Call(new RoomCategoryDialog(), this.ResumeAfterRoomCategoryDialog);
+            // context.Call(new RoomCategoryDialog(), this.ResumeAfterRoomCategoryDialog);
+
+            if (checkDatatime(this.reservation.CheckInDateTime,this.reservation.CheckOutDateTime) == true)
+                context.Call(new RoomCategoryDialog(), this.ResumeAfterRoomCategoryDialog);
+            else
+            {
+                await context.PostAsync("Thời gian đặt phòng và trả phòng không phù hợp. Mời quý khách nhập lại. Xin cảm ơn!!!");
+                var reservationDialog = new FormDialog<Reservation>(this.reservation, Reservation.BuildOrderForm, FormOptions.PromptInStart);
+                context.Call(reservationDialog, this.ResumeAfterReservationDialog);
+            }
+
             //var reservation = await result;
             //if (reservation is Reservation)
             //{
@@ -240,5 +257,20 @@
             //    await context.PostAsync(this.customer.Phone);
             //}
         }
+        //check datatime
+        Boolean checkDatatime(DateTime t1, DateTime t2 )
+        {
+            if (DateTime.Compare(t1, t2) <= 0)
+            {
+                return true;
+            }
+            else
+            {
+
+                return false;
+               
+            }
+        }
+        //------------------------------------------------------Being modified Code by Huynh Kien Minh ( 1/5/2018 ) finish at line 270
     }
 }
