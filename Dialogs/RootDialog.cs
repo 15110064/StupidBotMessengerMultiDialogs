@@ -22,6 +22,7 @@
 
         private Customer customer;
         private Reservation reservation;
+        private Room room;
 
         /// <summary>
         /// Ở constructor, khởi tạo 2 biến thành viên là customer và reservation.
@@ -41,7 +42,21 @@
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var message = await result;
-
+            if (message.Text.ToLower().Contains("cust53"))
+            {
+                Customer c = new Customer();
+                c.Name = "Tran Ngoc Khoa";
+                c.Phone = "092tes22222";
+                c.DateOfBirth = new DateTime(1998, 12,24);
+                CustomerModel tc = new CustomerModel();
+                tc.GetDataFromCustomer(c);
+               
+                using (CustomerService customerService = new CustomerService())
+                {
+                   CustomerModel savedCustomer = customerService.CreateCustomer(tc);
+                    await context.PostAsync("Đã lưu khách hàng với tên: " + savedCustomer.Name);
+                }
+            }
             if (message.Text.ToLower().Contains("help"))
             {
                 context.Call(new SupportDialog(), this.ResumeAfterSupportDialog);
@@ -136,7 +151,7 @@
             using (RoomService roomservice = new RoomService())
             {
                 await context.PostAsync("Thông tin phòng:");
-                Room room = roomservice.GetRoomFromID(reservation.RoomID);
+                this.room = roomservice.GetRoomFromID(reservation.RoomID);
                 var receiptCard = new HeroCard
                 {
                     Title = room.Name.ToString(),
@@ -214,7 +229,25 @@
             if (isCorrect)
             {
                 //Bắt đầu đẩy lên CSDL thông tin khách hàng và thông tin phiếu đặt phòng
-                await context.PostAsync("Đơn đặt phòng đã được lưu");
+                using (CustomerService customerService = new CustomerService())
+                {
+                    CustomerModel model = new CustomerModel();
+                    model.GetDataFromCustomer(this.customer);
+                    CustomerModel savedCustomer = customerService.CreateCustomer(model);
+                    this.reservation.CustomerID = savedCustomer.ID;
+                    
+                    using (ReservationService reservationService = new ReservationService())
+                    {
+                        ReservationModel reservationModel = new ReservationModel();
+                        reservationModel.GetDataFromReservation(this.reservation);
+                        //reservationModel.Customer = model;
+                        //reservationModel.Room = this.room;
+                        ReservationModel savedreservationModel = reservationService.CreateReservation(reservationModel);
+                        await context.PostAsync("Đơn đặt phòng đã được lưu với ID:" + savedreservationModel.ID);
+                    }
+
+                }
+                   
             }
             else
             {

@@ -16,8 +16,10 @@
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+            activity.Locale = "vi-VN";
             if (activity.Type == ActivityTypes.Message)
             {
+
                 await Conversation.SendAsync(activity, () => new RootDialog());
             }
            

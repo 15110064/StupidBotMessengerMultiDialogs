@@ -238,7 +238,7 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
             else
             {
                 await context.PostAsync("Cảm ơn quý khách!");
-                context.Done<object>(null);
+                context.Done<object>(result);
             }
         }
 

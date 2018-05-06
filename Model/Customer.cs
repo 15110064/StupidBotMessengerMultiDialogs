@@ -27,7 +27,7 @@ namespace StupidBotMessengerMultiDialogs.Model
         [Optional]
         [Prompt("Vui lòng nhập địa chỉ:")]
         public string Address { get; set; }
-    
+        [Prompt("Vui lòng nhập ngày sinh (VD: 12/25/1990:")]
         public DateTime DateOfBirth { get; set; }
      
         public string Nationality { get; set; }
@@ -61,6 +61,7 @@ namespace StupidBotMessengerMultiDialogs.Model
                 .Field(nameof(Name))
                 .Field(nameof(Phone))
                 .Field(nameof(Email))
+                .Field(nameof(DateOfBirth))
                 .Field(nameof(Address))
                 .Field(nameof(PassportNumber))
                 .Build();
