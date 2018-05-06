@@ -19,5 +19,7 @@ namespace MultiDialogsBot.Utils
         public static string CREATECUSTOMER = DOMAIN + ":" + PORTSSL + CUSTAPI + "/create";
         public static string CREATERESERVATION = DOMAIN + ":" + PORTSSL + RESERVATIONAPI + "/create";
         public static string GETCUSTOMERBYID = DOMAIN + ":" + PORTSSL + CUSTAPI + "/getbyid/";
+        public static string GETCUSTOMERBYPHONE = DOMAIN + ":" + PORTSSL + CUSTAPI + "/getbyphone/";
+        public static string GETCUSTOMERBYPASSPORT = DOMAIN + ":" + PORTSSL + CUSTAPI + "/getbypassport/";
     }
 }

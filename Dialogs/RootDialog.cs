@@ -172,7 +172,6 @@
             bool isCorrect = await argument;
             if (isCorrect)
             {
-                //new FormDialog<Models.Order>(this.order, Models.Order.BuildOrderForm, FormOptions.PromptInStart);
                 var customerDialog = new FormDialog<Customer>(this.customer, Customer.BuildCustomerForm, FormOptions.PromptInStart);
                 context.Call(customerDialog, this.ResumeAfterCustomerDialog);
             }
@@ -233,9 +232,17 @@
                 {
                     CustomerModel model = new CustomerModel();
                     model.GetDataFromCustomer(this.customer);
-                    CustomerModel savedCustomer = customerService.CreateCustomer(model);
+                    CustomerModel savedCustomer = null;
+                    if (customerService.GetByPassportNumber(model.PassportNumber) == null)
+                    {
+                        savedCustomer = customerService.CreateCustomer(model);
+                       
+                    }
+                    else
+                    {
+                        savedCustomer = customerService.GetByPassportNumber(model.PassportNumber);
+                    }
                     this.reservation.CustomerID = savedCustomer.ID;
-                    
                     using (ReservationService reservationService = new ReservationService())
                     {
                         ReservationModel reservationModel = new ReservationModel();

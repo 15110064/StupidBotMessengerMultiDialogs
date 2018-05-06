@@ -36,5 +36,16 @@ namespace StupidBotMessengerMultiDialogs.Services
                 return model;
             }
         }
+
+        public CustomerModel GetByPassportNumber(string passport)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                var json = (wc.DownloadString(HostValueUtils.GETCUSTOMERBYPASSPORT + passport));
+                CustomerModel model = (CustomerModel)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(CustomerModel));
+                return model;
+            }
+        }
     }
 }
