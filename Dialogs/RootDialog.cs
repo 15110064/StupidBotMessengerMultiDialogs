@@ -208,7 +208,7 @@
                         new Fact("Số điện thoại:", customer.Phone.ToString()),
                         new Fact("CMND:", customer.PassportNumber.ToString())
                     },
-                    Total = (room.Price* (Convert.ToDecimal((reservation.CheckOutDateTime - reservation.CheckInDateTime).TotalDays))).ToString()
+                    Total = (room.Price* (((reservation.CheckOutDateTime - reservation.CheckInDateTime).Days))).ToString()
                 };
                 Activity activity = context.Activity as Activity;
                 IMessageActivity message = activity.CreateReply();

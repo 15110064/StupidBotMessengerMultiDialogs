@@ -27,13 +27,14 @@ namespace StupidBotMessengerMultiDialogs.Model
         [Optional]
         [Template(TemplateUsage.NotUnderstood, "Địa chỉ email không hợp lê. Mời quý khách nhập lại")]
         [Pattern(@"[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]
-        [Prompt("Vui lòng nhập số email:")]
+        [Prompt("Vui lòng nhập email:")]
 
         public string Email { set; get; }
         [Optional]
         [Prompt("Vui lòng nhập địa chỉ:")]
         public string Address { get; set; }
         [Prompt("Vui lòng nhập Ngày sinh:")]
+        [Template(TemplateUsage.NotUnderstood, "Xin lỗi, định dạng ngày bị sai", "Quý khách vui lòng nhập đúng định dạng ngày")]
         public DateTime DateOfBirth { get; set; }
 
         public string Nationality { get; set; }
