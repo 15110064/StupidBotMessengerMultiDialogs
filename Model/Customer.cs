@@ -70,7 +70,18 @@ namespace StupidBotMessengerMultiDialogs.Model
             return new FormBuilder<Customer>()
                 .Field(nameof(Name))
                 .Field(nameof(PassportNumber))
-                .Field(nameof(DateOfBirth))
+                .Field(nameof(DateOfBirth),
+                      validate: async (state, value) =>
+                      {
+                          var result = new ValidateResult { IsValid = true, Value = value };
+                          //If checkoutdate is less than checkin date then its invalid input
+                          if (state.DateOfBirth > DateTime.Now)
+                          {
+                              result.IsValid = false;
+                              result.Feedback = "Hiện tại thì Khách sạn chưa nhận đặt phòng cho khách sinh ở thời điểm tương lai nhé.";
+                          }
+                          return result;
+                      })
                 .Field(nameof(Phone))
                 .Field(nameof(Email))
                 .Field(nameof(Address))

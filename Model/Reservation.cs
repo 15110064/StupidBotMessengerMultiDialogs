@@ -18,13 +18,12 @@ namespace StupidBotMessengerMultiDialogs.Model
         public int ID { set; get; }
 
         [Template(TemplateUsage.NotUnderstood, "Xin lỗi, định dạng ngày bị sai", "Quý khách vui lòng nhập đúng định dạng ngày")]
-        [Prompt("Vui lòng nhập vào thời gian nhận phòng (Ví dụ: 12/25/2018):")]
+        [Prompt("Vui lòng nhập vào thời gian nhận phòng (Ví dụ: 25/12/2018):")]
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd/MM/yyyy}")]
         public DateTime CheckInDateTime { get; set; }
         [Template(TemplateUsage.NotUnderstood, "Xin lỗi, định dạng ngày bị sai", "Quý khách vui lòng nhập đúng định dạng ngày")]
-        [Prompt("Vui lòng nhập vào thời gian trả phòng (Ví dụ: 12/25/2018):")]
+        [Prompt("Vui lòng nhập vào thời gian trả phòng (Ví dụ: 25/12/2018):")]
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd/MM/yyyy}")]
-     
         public DateTime CheckOutDateTime { get; set; }
 
         public string Note { get; set; }
@@ -46,8 +45,30 @@ namespace StupidBotMessengerMultiDialogs.Model
         public static IForm<Reservation> BuildOrderForm()
         {
             return new FormBuilder<Reservation>()
-                .Field(nameof(CheckInDateTime))
-                .Field(nameof(CheckOutDateTime))
+                .Field(nameof(CheckInDateTime),
+                      validate: async (state, value) =>
+                      {
+                          var result = new ValidateResult { IsValid = true, Value = value };
+                                                    //If checkoutdate is less than checkin date then its invalid input
+                          if (state.CheckInDateTime < DateTime.Now)
+                          {
+                              result.IsValid = false;
+                              result.Feedback = "Ngày đặt phòng phải là hôm nay hoặc ngày mai trở đi";
+                          }
+                          return result;
+                      })
+                .Field(nameof(CheckOutDateTime),
+                      validate: async (state, value) =>
+                      {
+                          var result = new ValidateResult { IsValid = true, Value = value };
+                          //If checkoutdate is less than checkin date then its invalid input
+                          if (state.CheckOutDateTime < DateTime.Now)
+                          {
+                              result.IsValid = false;
+                              result.Feedback = "Ngày trả phòng phải là hôm nay hoặc ngày mai trở đi";
+                          }
+                          return result;
+                      })
                 .Build();
         }
     }
