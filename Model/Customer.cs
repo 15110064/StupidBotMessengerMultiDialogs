@@ -74,11 +74,12 @@ namespace StupidBotMessengerMultiDialogs.Model
                       validate: async (state, value) =>
                       {
                           var result = new ValidateResult { IsValid = true, Value = value };
+                          DateTime birthDay = DateTime.Parse(value.ToString());
                           //If checkoutdate is less than checkin date then its invalid input
-                          if (state.DateOfBirth > DateTime.Now)
+                          if (birthDay > DateTime.Now)
                           {
                               result.IsValid = false;
-                              result.Feedback = "Hiện tại thì Khách sạn chưa nhận đặt phòng cho khách sinh ở thời điểm tương lai nhé.";
+                              result.Feedback = "Khách sạn không nhận đặt phòng cho khách chưa ra đời.";
                           }
                           return result;
                       })

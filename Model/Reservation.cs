@@ -49,8 +49,9 @@ namespace StupidBotMessengerMultiDialogs.Model
                       validate: async (state, value) =>
                       {
                           var result = new ValidateResult { IsValid = true, Value = value };
-                                                    //If checkoutdate is less than checkin date then its invalid input
-                          if (state.CheckInDateTime < DateTime.Now)
+                          DateTime checkIn = DateTime.Parse(value.ToString());
+                          //If checkoutdate is less than checkin date then its invalid input
+                          if (checkIn.Date < DateTime.Now.Date)
                           {
                               result.IsValid = false;
                               result.Feedback = "Ngày đặt phòng phải là hôm nay hoặc ngày mai trở đi";
@@ -58,17 +59,23 @@ namespace StupidBotMessengerMultiDialogs.Model
                           return result;
                       })
                 .Field(nameof(CheckOutDateTime),
-                      validate: async (state, value) =>
-                      {
-                          var result = new ValidateResult { IsValid = true, Value = value };
-                          //If checkoutdate is less than checkin date then its invalid input
-                          if (state.CheckOutDateTime < DateTime.Now)
-                          {
-                              result.IsValid = false;
-                              result.Feedback = "Ngày trả phòng phải là hôm nay hoặc ngày mai trở đi";
-                          }
-                          return result;
-                      })
+                     validate: async (state, value) =>
+                     {
+                         var result = new ValidateResult { IsValid = true, Value = value };
+                         DateTime checkOut = DateTime.Parse(value.ToString());
+                         //If checkoutdate is less than checkin date then its invalid input
+                         if (checkOut.Date < DateTime.Now.Date)
+                         {
+                             result.IsValid = false;
+                             result.Feedback = "Ngày đặt phòng phải là hôm nay hoặc ngày mai trở đi";
+                         }
+                         if (checkOut.Date <= state.CheckInDateTime)
+                         {
+                             result.IsValid = false;
+                             result.Feedback = "Ngày trả phòng phải lớn hơn ngày đặt phòng";
+                         }
+                         return result;
+                     })
                 .Build();
         }
     }
