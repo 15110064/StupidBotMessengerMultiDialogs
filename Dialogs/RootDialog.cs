@@ -33,11 +33,17 @@
             reservation = new Reservation();
         }
 
+        public RootDialog(IDialogContext context)
+        {
+            customer = new Customer();
+            reservation = new Reservation();
+        }
+
         public async Task StartAsync(IDialogContext context)
         {
              context.Wait(this.MessageReceivedAsync);
-        }
 
+        }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {

@@ -164,6 +164,14 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
 
         }
 
+        [LuisIntent("Help")]
+        public async Task Help(IDialogContext context, LuisResult result)
+        {
+            context.Call(new SupportDialog(), this.ResumeAfterSupportDialog);
+            await context.PostAsync("Vui lòng nhập vấn đề của bạn");
+
+        }
+
         [LuisIntent("HotelInformation")]
         public async Task HotelInformation(IDialogContext context, LuisResult result)
         {
@@ -244,8 +252,14 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
 
         private async Task ResumeAfterBookingDialog(IDialogContext context, IAwaitable<object> result)
         {
+            //this.ShowOptions(context);
             context.Done(result);
             //context.Wait(this.MessageReceived);
+        }
+
+        private async Task ResumeAfterSupportDialog(IDialogContext context, IAwaitable<int> result)
+        {
+            this.ShowOptions(context);
         }
 
     }
