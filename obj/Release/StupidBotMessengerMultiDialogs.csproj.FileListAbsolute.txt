@@ -114,3 +114,7 @@ F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\StupidBotMessengerMultiDialo
 F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\MultiDialogsBot.dll
 F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\MultiDialogsBot.pdb
 F:\DoAn2\StupidBotMessengerMultiDialogs\obj\Release\StupidBotMessengerMultiDialogs.csprojResolveAssemblyReference.cache
+F:\DoAn2\StupidBotMessengerMultiDialogs\bin\Microsoft.IdentityModel.Logging.pdb
+F:\DoAn2\StupidBotMessengerMultiDialogs\bin\Microsoft.IdentityModel.Tokens.pdb
+F:\DoAn2\StupidBotMessengerMultiDialogs\bin\Microsoft.Rest.ClientRuntime.xml
+F:\DoAn2\StupidBotMessengerMultiDialogs\bin\System.IdentityModel.Tokens.Jwt.pdb

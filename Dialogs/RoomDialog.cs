@@ -1,6 +1,7 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using StupidBotMessengerMultiDialogs.Asserts;
+using StupidBotMessengerMultiDialogs.Model;
 using StupidBotMessengerMultiDialogs.Services;
 using System;
 using System.Collections.Generic;
@@ -11,52 +12,70 @@ using System.Web;
 namespace StupidBotMessengerMultiDialogs.Dialogs
 {
     [Serializable]
-    public class RoomDialog : PagedCarouselDialog<string>
+    public class RoomDialog : IDialog<object>
     {
-        
+        public Reservation Reservation { get; set; }
+        public int RoomType { get; set; }
+        public int NumRoomsAvailables { get; set; }
+
         public RoomDialog()
         {
 
         }
-
-        public override string Prompt
+        public RoomDialog(Reservation reservation, int roomType, int numRoomsAvailables)
         {
-            get { return "Vui lòng chọn một trong các phòng sau:"; }
+            this.Reservation = reservation;
+            this.RoomType = roomType;
+            this.NumRoomsAvailables = numRoomsAvailables;
         }
 
-        public override PagedCarouselCards GetCarouselCards(int pageNumber, int pageSize)
+        public async Task StartAsync(IDialogContext context)
         {
 
-            List<HeroCard> heroCards;
-            using (RoomService roomTypeService = new RoomService())
-            {
-                heroCards = roomTypeService.GetRoomHeroCards();
-            }
-
-            return new PagedCarouselCards
-            {
-                Cards = heroCards,
-                TotalCount = heroCards.Capacity
-            };
+            var message = context.MakeMessage();
+            message.Text = "Vui lòng nhập số lượng phòng cần đặt";
+            await context.PostAsync(message);
+            context.Wait(this.MessageReceivedAsync);
         }
+        //protected async Task GetAvailableRoooms(IDialogContext context)
+        //{
+        //    var message = context.MakeMessage();
+        //    message.Text = "Vui lòng nhập số lượng phòng cần đặt";
+        //    await context.PostAsync(message);
+        //}
 
-        public override async Task ProcessMessageReceived(IDialogContext context, string roomId)
+        public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            List<string> roomTypeCatIds;
-            using (RoomService roomTypeService = new RoomService())
+            var message = await result;
+            
+            try
             {
-                roomTypeCatIds = roomTypeService.GetRoomID();
+                int numRoom = int.Parse(message.Text);
+                if(numRoom < 0)
+                {
+                    await context.PostAsync("Số lượng phòng không thể nhỏ hơn 0. Vui lòng nhập lại.");
+                    context.Wait(this.MessageReceivedAsync);
+                }
+                else if(numRoom > NumRoomsAvailables)
+                {
+                    await context.PostAsync("Chỉ còn " + NumRoomsAvailables + " phòng loại này. Vui lòng nhập lại.");
+                    context.Wait(this.MessageReceivedAsync);
+                }
+                else
+                {
+                    context.Done(message.Text);
+                }
             }
-            if (roomTypeCatIds.IndexOf(roomId) != -1)
+            catch(FormatException ex)
             {
-                context.Done(roomId);
-            }
-            else
-            {
-                //await context.PostAsync(string.Format(CultureInfo.CurrentCulture, Resources.FlowerCategoriesDialog_InvalidOption, flowerCategoryName));
-                await this.ShowProducts(context);
+                await context.PostAsync("Vui lòng nhập lại.");
                 context.Wait(this.MessageReceivedAsync);
             }
+
         }
+
+        
+
+
     }
 }

@@ -9,7 +9,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <NameOfLastUsedPublishProfile>stupid-messenger-bot-az - Web Deploy</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>stupidmessengerbot - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

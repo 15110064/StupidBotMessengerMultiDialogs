@@ -210,7 +210,6 @@ namespace StupidBotMessengerMultiDialogs.Dialogs
             var replyMessage = context.MakeMessage();
             replyMessage.Attachments = new List<Attachment> { attachment };
             await context.PostAsync(replyMessage);
-
             this.ShowOptions(context);
 
         }

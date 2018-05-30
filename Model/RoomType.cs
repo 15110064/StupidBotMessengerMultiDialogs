@@ -11,12 +11,14 @@ namespace StupidBotMessengerMultiDialogs.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public string Alias { get; set; }
+        public int MaxPeople { get; set; }
         public object Image { get; set; }
         public List<object> Rooms { get; set; }
         public DateTime CreatedDate { get; set; }
         public object CreatedBy { get; set; }
         public object UpdatedDate { get; set; }
         public object UpdatedBy { get; set; }
+        public decimal Price { set; get; }
         public object MetaKeyword { get; set; }
         public object MetaDescription { get; set; }
         public bool Status { get; set; }

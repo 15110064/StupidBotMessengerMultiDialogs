@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
 namespace StupidBotMessengerMultiDialogs.Model
 {
+    [Serializable]
     public class CustomerModel
     {
         public void GetDataFromCustomer(Customer customer)
@@ -14,7 +16,8 @@ namespace StupidBotMessengerMultiDialogs.Model
             this.Phone = customer.Phone;
             this.Email = customer.Email;
             this.Address = customer.Address;
-            this.DateOfBirth = customer.DateOfBirth;
+            this.DateOfBirth = customer.DateOfBirth.ToString("MM/dd/yyyy");
+            //this.DateOfBirth = customer.DateOfBirth.tO;
             this.Nationality = customer.Nationality;
             this.PassportNumber = customer.PassportNumber;
             this.FacebookID = customer.FacebookID;
@@ -23,6 +26,7 @@ namespace StupidBotMessengerMultiDialogs.Model
             this.UpdatedDate = customer.UpdatedDate;
             this.UpdatedBy = customer.UpdatedBy;
             this.Status = customer.Status;
+            
     }
         public int ID { set; get; }
        
@@ -34,7 +38,7 @@ namespace StupidBotMessengerMultiDialogs.Model
        
         public string Address { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
 
         public string Nationality { get; set; }
        

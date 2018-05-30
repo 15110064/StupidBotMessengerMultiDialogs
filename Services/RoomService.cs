@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using MultiDialogsBot.Utils;
+using System.Collections.Specialized;
 
 namespace StupidBotMessengerMultiDialogs.Services
 {
@@ -21,7 +22,9 @@ namespace StupidBotMessengerMultiDialogs.Services
             List<Room> postList;
             using (WebClient wc = new WebClient())
             {
+                //checkIn=04/06/2018&checkOut=07/06/2018&maxPeople=3
                 wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+               
                 var json = (wc.DownloadString(HostValueUtils.GETALLROOM));
 
                postList = (List<Room>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Room>));
@@ -46,8 +49,23 @@ namespace StupidBotMessengerMultiDialogs.Services
             }
         }
 
+        public List<Room> GetRoomsAvailable(string checkIn, string checkOut, int roomTypeId)
+        {
+            List<Room> postList;
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                var json = wc.DownloadString(HostValueUtils.GETAVAILABLEROOM + "?checkIn=" + checkIn
+                    + "&checkOut=" + checkOut
+                    + "&maxPeople=" + roomTypeId.ToString());
 
-        public List<HeroCard> GetRoomHeroCards()
+                postList = (List<Room>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Room>));
+                
+                return postList;
+            }
+        }
+
+            public List<HeroCard> GetRoomHeroCards()
         {
             List<Room> postList;
             using (WebClient wc = new WebClient())
@@ -58,6 +76,49 @@ namespace StupidBotMessengerMultiDialogs.Services
                 postList = (List<Room>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Room>));
                 List<HeroCard> heroCards = new List<HeroCard>();
                 
+                foreach (Room p in postList)
+                {
+                    List<CardImage> imgList = new List<CardImage>
+                    {
+                        new CardImage(HostValueUtils.DOMAIN + ":" + HostValueUtils.PORTSSL + p.Image)
+                    };
+                    var heroCard = new HeroCard
+                    {
+                        Title = p.Name,
+                        Text = p.Description,
+                        Images = imgList,
+                        Buttons = new List<CardAction> { new CardAction(ActionTypes.PostBack, "Đặt phòng này", value: p.ID.ToString()) }
+                    };
+                    heroCards.Add(heroCard);
+                }
+                return heroCards;
+            }
+        }
+
+      
+
+        public List<HeroCard> GetRoomHeroCards(DateTime checkIn, DateTime checkOut, int maxPeople)
+        {
+            List<Room> postList;
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                //var parameters = new NameValueCollection();
+                //wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                //parameters.Add("checkIn", checkIn.ToString("dd/MM/yyyy"));
+                //parameters.Add("checkOut", checkOut.ToString("dd/MM/yyyy"));
+                //parameters.Add("maxPeople", maxPeople.ToString());
+
+                
+                
+                //var json = (wc.DownloadString(HostValueUtils.GETAVAILABLEROOM));
+                var json = wc.DownloadString(HostValueUtils.GETAVAILABLEROOM + "?checkIn=" + checkIn.ToString("MM/dd/yyyy")
+                    + "&checkOut=" + checkOut.ToString("MM/dd/yyyy")
+                    + "&maxPeople=" + maxPeople.ToString());
+
+                postList = (List<Room>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Room>));
+                List<HeroCard> heroCards = new List<HeroCard>();
+
                 foreach (Room p in postList)
                 {
                     List<CardImage> imgList = new List<CardImage>
@@ -156,6 +217,18 @@ namespace StupidBotMessengerMultiDialogs.Services
         {
             Room room = (Room)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonOject.ToString(), typeof(Room));
             return room;
+        }
+
+        public decimal GetPrice(List<int> ids)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                string idstring = Newtonsoft.Json.JsonConvert.SerializeObject(ids, new Newtonsoft.Json.JsonSerializerSettings { NullValueHandling = Newtonsoft.Json.NullValueHandling.Include });
+                wc.Headers.Add(header: HttpRequestHeader.ContentType, value: "application/json; charset=utf-8");
+                string json = wc.UploadString(HostValueUtils.GETTOTALPRICE, idstring);
+                decimal savedReservation = (decimal)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(decimal));
+                return savedReservation;
+            }
         }
     }
 

@@ -8,7 +8,7 @@ namespace StupidBotMessengerMultiDialogs.Model
     [Serializable]
     public class Room
     {
-        public object RoomType { get; set; }
+        public RoomType RoomType { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
